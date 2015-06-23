@@ -36,6 +36,7 @@ The files annotated by an '*' indicate that they are created by package installa
         client.cfg *
         facts.yaml *
         server.cfg *
+        ssl
 
     /etc/puppetlabs/puppet *              # :confdir                     /etc/puppet
         auth.conf *                       # :rest_authconfig
@@ -301,7 +302,11 @@ The package will install a service named `puppetserver`, create a
     /etc/puppetlabs/puppetserver
         logback.xml
         conf.d
-            puppetserver.conf
+            pe-puppet-server.conf
+            metrics.conf
+
+    /etc/puppetlabs/r10k
+        r10k.yaml                         # r10k configuration file
 
     /opt/puppetlabs/bin                   # symlinks of puppet server binaries
         puppetserver@                     -> /opt/puppetlabs/server/apps/puppetserver/bin/puppetserver
@@ -328,6 +333,11 @@ The package will install a service named `puppetserver`, create a
                 server_data               # :server_datadir
                 yaml                      # :yamldir
 
+        pe_version
+
+        pe_build
+
+
     /var/log/puppetlabs
         puppetserver *                    # writeable by puppetserver
             puppetserver.log
@@ -345,15 +355,17 @@ The package will install a service named `puppetmaster`, create a
 
     /opt/puppetlabs/server *              # serverside apps live underneath
         data *
-            puppetmaster *                # :vardir (and $HOME for services that use it)
+            puppetserver *                # :vardir (and $HOME for services that use it)
                 bucket                    # :bucketdir
                 reports                   # :reportdir
                 server_data               # :server_datadir
                 yaml                      # :yamldir
 
     /var/log/puppetlabs
-        puppetmaster *                    # writeable by puppetmaster
-            puppetmaster.log
+        puppetserver *                    # writeable by puppetmaster
+            puppetserver.log
+            masterhttp.log
+            puppetserver-access.log
 
     /var/run/puppetlabs                   # :rundir                      /var/lib/puppet/run
         puppetmaster *                    # writeable by puppetmaster
